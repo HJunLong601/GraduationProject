@@ -67,7 +67,6 @@ public class MainView extends BaseView implements MainActivity.MainViewListener 
     private SQLiteDatabase db;
 
 
-
     public MainView(Context context) {
         super(context);
 
@@ -143,13 +142,7 @@ public class MainView extends BaseView implements MainActivity.MainViewListener 
         }
 
 
-
-
-
     }
-
-
-
 
 
     public void GenerateObject(){
@@ -222,7 +215,7 @@ public class MainView extends BaseView implements MainActivity.MainViewListener 
                 //判断是否击中
                 for (Bullet bullet : bullets){
                     if (bullet.isAlive()){ // 子弹是否存活
-                        if (object.isCollide(bullet)){ // 是否击中
+                        if (object.isCollide(bullet)){ // 是否击中 击中飞机扣血
                             bullet.setAlive(false);
 
                         }
@@ -288,7 +281,6 @@ public class MainView extends BaseView implements MainActivity.MainViewListener 
 
                     drawSelf();
                 }
-
 
                 GameFrameTime = System.nanoTime()/1000000L - DrawStartTime;  //实际执行时间
                 sleepTime = period - GameFrameTime;
