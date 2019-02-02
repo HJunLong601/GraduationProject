@@ -1,14 +1,18 @@
 package com.hjl.graduationpro.Util;
 
+import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.support.annotation.NonNull;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.util.TypedValue;
 
-public class BitmapUtil {
+public class Util {
 
     public static Bitmap decodeSampleBitmapFromResources(Resources res,int resID,int reqWidth,int reqHeight){
         final BitmapFactory.Options options = new BitmapFactory.Options();
@@ -52,6 +56,15 @@ public class BitmapUtil {
                 new Rect(0,0,width,hight),
                 p);
         return tempBitmap;
+    }
+
+    public static float dip2px(int value, DisplayMetrics metrics){
+        return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,value,metrics);
+    }
+
+    public static int px2dip(Context context, float pxValue){
+        final float scale = context.getResources().getDisplayMetrics().density;
+        return (int)(pxValue / scale + 0.5f);
     }
 
 }

@@ -1,6 +1,5 @@
 package com.hjl.graduationpro.View;
 
-import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
@@ -20,14 +19,13 @@ import com.hjl.graduationpro.GameActivity;
 import com.hjl.graduationpro.GameObject.BigPlane;
 import com.hjl.graduationpro.GameObject.Bullet;
 import com.hjl.graduationpro.GameObject.EnemyPlane;
-import com.hjl.graduationpro.GameObject.GameObject;
 import com.hjl.graduationpro.GameObject.MidPlane;
 import com.hjl.graduationpro.GameObject.MyPlane;
 import com.hjl.graduationpro.GameObject.SmallPlane;
 import com.hjl.graduationpro.MainActivity;
 import com.hjl.graduationpro.R;
 import com.hjl.graduationpro.TaskSystem.Task;
-import com.hjl.graduationpro.Util.BitmapUtil;
+import com.hjl.graduationpro.Util.Util;
 import com.hjl.graduationpro.sounds.GameSoundPool;
 
 import java.util.ArrayList;
@@ -198,16 +196,20 @@ public class MainView extends BaseView implements MainActivity.MainViewListener 
         if (isGameOver){
             paint.setTextSize(70);
             paint.setColor(Color.BLACK);
-            cacheCanvas.drawBitmap(gameOver,100,screen_height/3,paint);
-            cacheCanvas.drawText(""+task.getGrade(),screen_width/2,screen_height/3 + 100 ,paint);
+            cacheCanvas.drawBitmap(gameOver,
+                    100,
+                    screen_height/3,
+                    paint);
+            cacheCanvas.drawText(""+task.getGrade(),screen_width/2,screen_height/3 +
+                    Util.dip2px(45,getContext().getResources().getDisplayMetrics()) ,paint);
             enemyList.clear();
 
         }
 
 //        Log.i(TAG,"wid is " + gameOver.getWidth() + "h is :"  + gameOver.getHeight());
 
-        Log.i(TAG,"enemyList size is " + enemyList.size());
-        Log.i(TAG,"bulletList size is " + bullets.size());
+//        Log.i(TAG,"enemyList size is " + enemyList.size());
+//        Log.i(TAG,"bulletList size is " + bullets.size());
 
         //遍历敌机 画敌机
         for (EnemyPlane object :(ArrayList<EnemyPlane>) enemyList.clone()){
@@ -308,23 +310,23 @@ public class MainView extends BaseView implements MainActivity.MainViewListener 
     public void initBitmap() {
 
         cacheBitmap = Bitmap.createBitmap(screen_width,screen_height,Bitmap.Config.ARGB_8888);
-        background = BitmapUtil.decodeSampleBitmapFromResources(getResources(), R.drawable.bg_01,screen_width,screen_height);
-        background2 = BitmapUtil.decodeSampleBitmapFromResources(getResources(), R.drawable.bg_02,screen_width,screen_height);
-        play = BitmapUtil.decodeSampleBitmapFromResources(getResources(),R.drawable.play,40,80);
-        gameOver = BitmapUtil.decodeSampleBitmapFromResources(getResources(),R.drawable.over_grade,screen_width-200,screen_height/3);
-        gameOver = BitmapUtil.changeBitmapSize(gameOver,screen_width-200,screen_height/3);
+        background = Util.decodeSampleBitmapFromResources(getResources(), R.drawable.bg_01,screen_width,screen_height);
+        background2 = Util.decodeSampleBitmapFromResources(getResources(), R.drawable.bg_02,screen_width,screen_height);
+        play = Util.decodeSampleBitmapFromResources(getResources(),R.drawable.play,40,80);
+        gameOver = Util.decodeSampleBitmapFromResources(getResources(),R.drawable.over_grade,screen_width-200,screen_height/3);
+        gameOver = Util.changeBitmapSize(gameOver,screen_width-200,screen_height/3);
         bg_y = -screen_height;
         bg_y2 = 0;
 
-        myPlaneExp.add(BitmapUtil.changeBitmapSize(BitmapFactory.decodeResource(getResources(), R.drawable.explode1),210,240));
-        myPlaneExp.add(BitmapUtil.changeBitmapSize(BitmapFactory.decodeResource(getResources(),R.drawable.explode3),210,240));
-        myPlaneExp.add(BitmapUtil.changeBitmapSize(BitmapFactory.decodeResource(getResources(),R.drawable.explode4),210,240));
-        myPlaneExp.add(BitmapUtil.changeBitmapSize(BitmapFactory.decodeResource(getResources(),R.drawable.explode5),210,240));
-        myPlaneExp.add(BitmapUtil.changeBitmapSize(BitmapFactory.decodeResource(getResources(),R.drawable.explode6),210,240));
-        myPlaneExp.add(BitmapUtil.changeBitmapSize(BitmapFactory.decodeResource(getResources(),R.drawable.explode7),210,240));
-        myPlaneExp.add(BitmapUtil.changeBitmapSize(BitmapFactory.decodeResource(getResources(),R.drawable.explode8),210,240));
-        myPlaneExp.add(BitmapUtil.changeBitmapSize(BitmapFactory.decodeResource(getResources(),R.drawable.explode9),210,240));
-        myPlaneExp.add(BitmapUtil.changeBitmapSize(BitmapFactory.decodeResource(getResources(),R.drawable.explode12),210,240));
+        myPlaneExp.add(Util.changeBitmapSize(BitmapFactory.decodeResource(getResources(), R.drawable.explode1),210,240));
+        myPlaneExp.add(Util.changeBitmapSize(BitmapFactory.decodeResource(getResources(),R.drawable.explode3),210,240));
+        myPlaneExp.add(Util.changeBitmapSize(BitmapFactory.decodeResource(getResources(),R.drawable.explode4),210,240));
+        myPlaneExp.add(Util.changeBitmapSize(BitmapFactory.decodeResource(getResources(),R.drawable.explode5),210,240));
+        myPlaneExp.add(Util.changeBitmapSize(BitmapFactory.decodeResource(getResources(),R.drawable.explode6),210,240));
+        myPlaneExp.add(Util.changeBitmapSize(BitmapFactory.decodeResource(getResources(),R.drawable.explode7),210,240));
+        myPlaneExp.add(Util.changeBitmapSize(BitmapFactory.decodeResource(getResources(),R.drawable.explode8),210,240));
+        myPlaneExp.add(Util.changeBitmapSize(BitmapFactory.decodeResource(getResources(),R.drawable.explode9),210,240));
+        myPlaneExp.add(Util.changeBitmapSize(BitmapFactory.decodeResource(getResources(),R.drawable.explode12),210,240));
     }
     public void viewLogic(){
 
@@ -402,20 +404,22 @@ public class MainView extends BaseView implements MainActivity.MainViewListener 
 
             //结束点击判断
 
+            float paddingPx = Util.dip2px(45,getContext().getResources().getDisplayMetrics());
+
             if (isGameOver){
-                if (event.getX()> 100+135 &&
-                        event.getY() > screen_height/3+290 &&
-                        event.getX() < 100 + 880 -170 &&
-                        event.getY() < screen_height/3 + 290 + 145 )
+                if (event.getX()> 100+paddingPx &&
+                        event.getY() > screen_height/2 &&
+                        event.getX() < screen_width - 100 - paddingPx &&
+                        event.getY() < screen_height/2 + screen_height/12 )
                 {    //点击了重新开始
                     Intent toSelf = new Intent(getContext(),GameActivity.class);
                     gameActivity.startActivity(toSelf);
 
                     gameActivity.finish();
-                }else if (event.getX()> 100+135 &&
-                        event.getY() > screen_height/3 + 290 + 145 &&
-                        event.getX() < 100 + 880 - 170 &&
-                        event.getY() < screen_height/3 + 580 - 10)
+                }else if (event.getX()> 100+paddingPx &&
+                        event.getY() > screen_height/2 + screen_height/12 &&
+                        event.getX() < screen_width - 100 - paddingPx &&
+                        event.getY() < screen_height/2 + screen_height/6)
                 {  //点击了提交分数
                     if (task.getGrade() != 0){
                         ContentValues values = new ContentValues();
@@ -426,7 +430,6 @@ public class MainView extends BaseView implements MainActivity.MainViewListener 
                     }else {
                         Toast.makeText(getContext(),"成绩不能为零！",Toast.LENGTH_SHORT).show();
                     }
-
                     Intent intent = new Intent(getContext(),MainActivity.class);
                     getContext().startActivity(intent);
 
