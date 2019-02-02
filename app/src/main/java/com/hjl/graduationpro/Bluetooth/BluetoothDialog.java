@@ -39,7 +39,7 @@ public class BluetoothDialog extends DialogFragment implements AdapterView.OnIte
     private ArrayList<String> deviceList;
     private ArrayList<BluetoothDevice> devices;
 
-    private ArrayAdapter<String> mAdapter;
+    private BluetoothListAdapter mAdapter;
 
     private static final String TAG = "BluetoothDialog";
 
@@ -63,13 +63,13 @@ public class BluetoothDialog extends DialogFragment implements AdapterView.OnIte
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.dialog_layout,container,false);
         getDialog().requestWindowFeature(Window.FEATURE_NO_TITLE);
-        mAdapter = new ArrayAdapter<String>(view.getContext(),android.R.layout.simple_list_item_1,deviceList);
+
         cancel = view.findViewById(R.id.dialog_cancel_btn);
         search = view.findViewById(R.id.dialog_search_btn);
         disable = view.findViewById(R.id.dialog_disable_btn);
 
         listView = view.findViewById(R.id.dialog_listview);
-        listView.setAdapter(mAdapter);
+
         listView.setOnItemClickListener(this);
 
         cancel.setOnClickListener(new View.OnClickListener() {
@@ -108,6 +108,11 @@ public class BluetoothDialog extends DialogFragment implements AdapterView.OnIte
     @Override
     public void onStart() {
         super.onStart();
+        if (mAdapter != null){
+            listView.setAdapter(mAdapter);
+            Log.i(TAG,"setAdapter");
+        }
+
 //        animator.start();
     }
 
@@ -123,6 +128,13 @@ public class BluetoothDialog extends DialogFragment implements AdapterView.OnIte
     public void onAttach(Context context) {
         super.onAttach(context);
 
+
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        mAdapter = new BluetoothListAdapter(view.getContext(),R.layout.listview_item,deviceList);
 
     }
 

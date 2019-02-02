@@ -31,6 +31,7 @@ public class BluetoothHelper extends Thread{
 
     private BluetoothSocket socket;
     private BluetoothDevice device;
+    private static final String TAG = "BluetoothHelper";
 
     private InputStream inputStream;
     private OutputStream outputStream;
@@ -64,6 +65,7 @@ public class BluetoothHelper extends Thread{
 
             socket.connect();
             bluetoothListenr.onConnectDecvice();
+            Log.i(TAG,"连接蓝牙设备");
 
             inputStream = socket.getInputStream();
             outputStream = socket.getOutputStream();

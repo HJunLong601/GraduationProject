@@ -314,6 +314,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onSearchDevice() {
         initDevice();
         deviceList.clear();
+        devices.clear();
         dialog.getmAdapter().notifyDataSetChanged();
         if (mBluetoothAdapter != null && mBluetoothAdapter.isDiscovering() ){
             mBluetoothAdapter.cancelDiscovery();
