@@ -289,7 +289,7 @@ public class MainView extends BaseView implements MainActivity.MainViewListener 
                 if (sleepTime <= 0 ){
                     sleepTime = 2;
                 }
-                Log.i("GameFrame","Frame Before Lock : " + String.valueOf(1000/(GameFrameTime+0.001)));  //锁定前帧率
+                //Log.i("GameFrame","Frame Before Lock : " + String.valueOf(1000/(GameFrameTime+0.001)));  //锁定前帧率
                 if (GameFrameTime<period){
                     try {
                         Thread.sleep(sleepTime);
@@ -298,7 +298,7 @@ public class MainView extends BaseView implements MainActivity.MainViewListener 
                     }
                 }
                 GameFrameTime = System.nanoTime()/1000000L - DrawStartTime; //锁定帧率后实际帧率
-                Log.i("GameFrame","Frame After Lock : " + String.valueOf(1000/(GameFrameTime+0.001)));  //锁定前帧率
+                //Log.i("GameFrame","Frame After Lock : " + String.valueOf(1000/(GameFrameTime+0.001)));  //锁定前帧率
 
             }
         }catch (Exception e){
@@ -359,23 +359,49 @@ public class MainView extends BaseView implements MainActivity.MainViewListener 
 
     @Override
     public void onReceiveBluData(String data) {
-        Log.i("MainView",data);
-        char fistCode = data.charAt(0);
-        if (fistCode == 'a'){
-            if ((int) myPlane.getObject_x() + 10 < screen_width - myPlane.getWidth()){
-                myPlane.setObject_x((int) myPlane.getObject_x() + 10);
-            }
-        }else if (fistCode == 'b'){
-            if ((int) myPlane.getObject_x() - 10 > 0){
-                myPlane.setObject_x((int) myPlane.getObject_x() - 10);
-            }
-
+        Log.i("Receive",data);
+        for (int i=0;i < data.length(); i++){
+            analyzeData(data.charAt(i));
         }
 
     }
 
+    private void analyzeData(char data){
+        switch (data){
+            case 'a':
+                if ((int) myPlane.getObject_x() - 10 > 0){
+                    myPlane.setObject_x((int) myPlane.getObject_x() - 10);
+                }else {
+                    myPlane.setObject_x(0); // 若超过屏幕左边边界 则设为0
+                }
+                break;
+            case 'd':
+                if ((int) myPlane.getObject_x() + 10 < screen_width - myPlane.getWidth()){
+                    myPlane.setObject_x((int) myPlane.getObject_x() + 10);
+                }else {
+                    myPlane.setObject_x( (int) (screen_width - myPlane.getWidth()) );
+                }
+                break;
+            case 'w':
+                if ((int) myPlane.getObject_y() - 10 > 0 ){
+                    myPlane.setObject_y((int) myPlane.getObject_y() - 10);
+                }else {
+                    myPlane.setObject_y(0);
+                }
+                break;
+            case 's':
+                if ((int) myPlane.getObject_y() + 10 < screen_height - myPlane.getHeight() ){
+                    myPlane.setObject_y((int) myPlane.getObject_y() + 10);
+                }else {
+                    myPlane.setObject_y((int)(screen_height - myPlane.getHeight()));
+                }
+            break;
+        }
+    }
+
+
     // 是否点击飞机
-    private boolean isTouchPlane = false;
+    private boolean isTouchPlane = true;
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
