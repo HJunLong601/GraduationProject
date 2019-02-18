@@ -6,11 +6,10 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 
 import com.hjl.graduationpro.R;
-import com.hjl.graduationpro.sounds.GameSoundPool;
 
 import java.util.ArrayList;
 
-public class MyPlane extends GameObject {
+public class MySecPlane extends GameObject {
 
     private Bitmap myPlane;
 
@@ -25,7 +24,7 @@ public class MyPlane extends GameObject {
     private ArrayList<Bitmap> explodes;
 
     // MyPlane: h is :240 w is : 210
-    public MyPlane(Resources resources) {
+    public MySecPlane(Resources resources) {
         super(resources);
         alive = true;
         isExplosion = false;
@@ -72,7 +71,7 @@ public class MyPlane extends GameObject {
 
     @Override
     public void initBiamap() {
-        myPlane = BitmapFactory.decodeResource(resources, R.drawable.myplane2);
+        myPlane = BitmapFactory.decodeResource(resources, R.drawable.myplane3);
         width = myPlane.getWidth() / 2;
         height = myPlane.getHeight();
 
@@ -83,7 +82,7 @@ public class MyPlane extends GameObject {
         if (!isInitial){
             initBiamap();
 
-            object_x = (int) screen_width/2 ;
+            object_x = (int) screen_width/2 - width;
             object_y = (int)screen_height - height;
 
             isExplosion = false;
@@ -164,4 +163,5 @@ public class MyPlane extends GameObject {
     public void setPlayDieSound(boolean playDieSound) {
         this.playDieSound = playDieSound;
     }
+
 }

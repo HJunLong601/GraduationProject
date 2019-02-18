@@ -14,8 +14,8 @@ public class Task {
 
     private Task(){
         bigSpeed = 8;
-        midSpeed = 12;
-        smlSpeed = 16;
+        midSpeed = 10;    // 12
+        smlSpeed = 12;    // 16
 
     }
 
@@ -79,17 +79,17 @@ public class Task {
 
     public int getBigSpeed() {
         computeRank();
-        return bigSpeed + rank*2;
+        return bigSpeed + rank*1;
     }
 
     public int getMidSpeed() {
         computeRank();
-        return midSpeed + rank*3;
+        return midSpeed + rank*2;
     }
 
     public int getSmlSpeed() {
         computeRank();
-        return smlSpeed + rank*4;
+        return smlSpeed + rank*3;
     }
 
 }

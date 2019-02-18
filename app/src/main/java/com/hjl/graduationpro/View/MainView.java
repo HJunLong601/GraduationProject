@@ -21,6 +21,7 @@ import com.hjl.graduationpro.GameObject.Bullet;
 import com.hjl.graduationpro.GameObject.EnemyPlane;
 import com.hjl.graduationpro.GameObject.MidPlane;
 import com.hjl.graduationpro.GameObject.MyPlane;
+import com.hjl.graduationpro.GameObject.MySecPlane;
 import com.hjl.graduationpro.GameObject.SmallPlane;
 import com.hjl.graduationpro.MainActivity;
 import com.hjl.graduationpro.R;
@@ -58,10 +59,12 @@ public class MainView extends BaseView implements MainActivity.MainViewListener 
 
     private ArrayList<EnemyPlane> enemyList;
     private ArrayList<Bullet> bullets;
+    private ArrayList<Bullet> secBullets;
     private ArrayList<Bitmap> myPlaneExp;
 
     private GameSoundPool soundPool;
     private MyPlane myPlane;
+    private MySecPlane mySecPlane;
     private SQLiteDatabase db;
 
 
@@ -78,8 +81,10 @@ public class MainView extends BaseView implements MainActivity.MainViewListener 
         soundPool = new GameSoundPool(gameActivity);
         enemyList = new ArrayList<>();
         bullets = new ArrayList<>();
+        secBullets = new ArrayList<>();
         myPlaneExp = new ArrayList<>();
         myPlane = (MyPlane) factory.creareGameObject(GameObjectFactory.MY_PLANE);
+        mySecPlane = (MySecPlane) factory.creareGameObject(GameObjectFactory.MY_SEC_PLANE);
         db = gameActivity.getDb();
         task.reStartAll();
 
@@ -132,6 +137,18 @@ public class MainView extends BaseView implements MainActivity.MainViewListener 
 
         }
 
+        //初始化 第二飞机的子弹
+        for (Bullet object : secBullets){
+
+            if (object.isAlive()){
+                object.setScreenWH(screen_width,screen_height);
+                object.initial(mySecPlane.getMiddle_x(),mySecPlane.getMiddle_y(),50);
+                // Log.i(TAG,"y is " + myPlane.getMiddle_y());
+                object.setObjectList(secBullets);
+            }
+
+        }
+
         //初始化 主飞机  重要：并且实时更新 midY 的数据  /*已移动到logic（）函数 */
         if (myPlane.isAlive()&&!myPlane.isInitial()){
             myPlane.setScreenWH(screen_width,screen_height);
@@ -139,30 +156,44 @@ public class MainView extends BaseView implements MainActivity.MainViewListener 
             myPlane.setExplodes(myPlaneExp);
         }
 
+        //初始化 第二架飞机  重要：并且实时更新 midY 的数据  /*已移动到logic（）函数 */
+        if (mySecPlane.isAlive()&&!mySecPlane.isInitial()){
+            mySecPlane.setScreenWH(screen_width,screen_height);
+            mySecPlane.initial(0,0,0);
+            mySecPlane.setExplodes(myPlaneExp);
+        }
+
+
 
     }
 
 
     public void GenerateObject(){
         GenerateCurrentCount ++;
-        if (GenerateCurrentCount % SmallPlane.GeneratedNum == 0 && myPlane.isAlive()){
+        if (GenerateCurrentCount % SmallPlane.GeneratedNum == 0 && !isGameOver){
             enemyList.add((SmallPlane)factory.creareGameObject(GameObjectFactory.SMALL_PLANE));
           // Log.i("GameView","Generate");
         }
 
-        if (GenerateCurrentCount % MidPlane.GeneratedNum == 0 && myPlane.isAlive()){
+        if (GenerateCurrentCount % MidPlane.GeneratedNum == 0 && !isGameOver){
             //Log.i("GameView","Generate Mid");
             enemyList.add((MidPlane)factory.creareGameObject(GameObjectFactory.MID_PLANE));
         }
 
-        if (GenerateCurrentCount % BigPlane.GeneratedNum == 0 && myPlane.isAlive() ){
+        if (GenerateCurrentCount % BigPlane.GeneratedNum == 0 && !isGameOver ){
             //Log.i("GameView","Generate Big");
             enemyList.add((BigPlane)factory.creareGameObject(GameObjectFactory.BIG_PLANE));
         }
 
-        if (GenerateCurrentCount % Bullet.GeneratedNum == 0 && isTouchPlane && myPlane.isAlive()){
+        if (GenerateCurrentCount % Bullet.GeneratedNum == 0 && myPlane.isAlive()){
             //Log.i("GameView","Generate Bullet");
             bullets.add((Bullet) factory.creareGameObject(GameObjectFactory.BULLET));
+            soundPool.playSound(GameSoundPool.SOUND_SHOOT,0);
+        }
+
+        if (GenerateCurrentCount % Bullet.GeneratedNum == 0 && mySecPlane.isAlive()){
+            //Log.i("GameView","Generate Bullet");
+            secBullets.add((Bullet) factory.creareGameObject(GameObjectFactory.BULLET));
             soundPool.playSound(GameSoundPool.SOUND_SHOOT,0);
         }
 
@@ -223,17 +254,32 @@ public class MainView extends BaseView implements MainActivity.MainViewListener 
                         }
                     }
                 }
+
+                //判断是否击中
+                for (Bullet bullet :secBullets){
+                    if (bullet.isAlive()){ // 子弹是否存活
+                        if (object.isCollide(bullet)){ // 是否击中 击中飞机扣血
+                            bullet.setAlive(false);
+
+                        }
+                    }
+                }
+
                 object.drawSelf(cacheCanvas);
             }
 
         }
 
         //画飞机
-        if (myPlane.isAlive()){
+        if (myPlane.isAlive() | mySecPlane.isAlive()){
 
             for (EnemyPlane object :(ArrayList<EnemyPlane>) enemyList.clone()){
                 if (object.isAlive()){
-                    if (myPlane.isCollide(object)){
+                    if (myPlane.isCollide(object) & !mySecPlane.isAlive()){ //两架飞机都爆炸了游戏才结束
+                        isGameOver = true;
+                    }
+
+                    if (mySecPlane.isCollide(object) & !myPlane.isAlive()){
                         isGameOver = true;
                     }
                 }
@@ -244,7 +290,13 @@ public class MainView extends BaseView implements MainActivity.MainViewListener 
                 myPlane.setPlayDieSound(true);
             }
 
+            if (mySecPlane.isExplosion() && !mySecPlane.isPlayDieSound()){
+                soundPool.playSound(GameSoundPool.SOUND_BIG_EXP,0);
+                mySecPlane.setPlayDieSound(true);
+            }
+
             myPlane.drawSelf(cacheCanvas);
+            mySecPlane.drawSelf(cacheCanvas);
         }
 
         //画子弹
@@ -257,6 +309,17 @@ public class MainView extends BaseView implements MainActivity.MainViewListener 
             }
 
         }
+
+        for (Bullet object : (ArrayList<Bullet>) secBullets.clone() ){
+
+            if (object.isAlive()){
+                object.drawSelf(cacheCanvas);
+            }else {
+                object.release();
+            }
+
+        }
+
         //
 
 
@@ -328,6 +391,8 @@ public class MainView extends BaseView implements MainActivity.MainViewListener 
         myPlaneExp.add(Util.changeBitmapSize(BitmapFactory.decodeResource(getResources(),R.drawable.explode9),210,240));
         myPlaneExp.add(Util.changeBitmapSize(BitmapFactory.decodeResource(getResources(),R.drawable.explode12),210,240));
     }
+
+    //背景图逻辑
     public void viewLogic(){
 
         //第一轮循环 拼接 y = -screen_height;
@@ -395,12 +460,42 @@ public class MainView extends BaseView implements MainActivity.MainViewListener 
                 }else {
                     myPlane.setObject_y((int)(screen_height - myPlane.getHeight()));
                 }
-            break;
+                break;
+            case 'j':
+                if ((int) mySecPlane.getObject_x() - 10 > 0){
+                    mySecPlane.setObject_x((int) mySecPlane.getObject_x() - 10);
+                }else {
+                    mySecPlane.setObject_x(0); // 若超过屏幕左边边界 则设为0
+                }
+                break;
+            case 'l':
+                if ((int) mySecPlane.getObject_x() + 10 < screen_width - mySecPlane.getWidth()){
+                    mySecPlane.setObject_x((int) mySecPlane.getObject_x() + 10);
+                }else {
+                    mySecPlane.setObject_x( (int) (screen_width - mySecPlane.getWidth()) );
+                }
+                break;
+            case 'i':
+                if ((int) mySecPlane.getObject_y() - 10 > 0 ){
+                    mySecPlane.setObject_y((int) mySecPlane.getObject_y() - 10);
+                }else {
+                    mySecPlane.setObject_y(0);
+                }
+                break;
+            case 'k':
+                if ((int) mySecPlane.getObject_y() + 10 < screen_height - mySecPlane.getHeight() ){
+                    mySecPlane.setObject_y((int) mySecPlane.getObject_y() + 10);
+                }else {
+                    mySecPlane.setObject_y((int)(screen_height - mySecPlane.getHeight()));
+                }
+                break;
+
         }
     }
 
 
     // 是否点击飞机
+    // 测试蓝牙 即使不点击 也为true 即可以改变飞机的位置
     private boolean isTouchPlane = true;
 
     @Override
@@ -415,7 +510,7 @@ public class MainView extends BaseView implements MainActivity.MainViewListener 
             // 判定是否点击飞机
             if (x > myPlane.getObject_x() && x < myPlane.getObject_x() + myPlane.getWidth()
                     && y > myPlane.getObject_y() && y < myPlane.getObject_y() + myPlane.getHeight()){
-                isTouchPlane = true;
+                //isTouchPlane = true;
             }
             // 判定是否点击了开始暂停
             if (x > screen_width - 80 && x < screen_width ){
@@ -469,12 +564,12 @@ public class MainView extends BaseView implements MainActivity.MainViewListener 
             float y = event.getY();
 
             if (isTouchPlane && !isStopDraw){
-                myPlane.setObject_x((int) x - (int) myPlane.getWidth()/2);
-                myPlane.setObject_y((int) y  - (int) myPlane.getHeight()/2);
+//                myPlane.setObject_x((int) x - (int) myPlane.getWidth()/2);
+//                myPlane.setObject_y((int) y  - (int) myPlane.getHeight()/2);
             }
 
         } else if (event.getAction() == MotionEvent.ACTION_UP){
-            isTouchPlane = false;
+            //isTouchPlane = false;
         }
 
         return true;
