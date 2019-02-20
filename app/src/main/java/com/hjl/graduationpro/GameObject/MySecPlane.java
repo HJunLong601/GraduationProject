@@ -71,7 +71,7 @@ public class MySecPlane extends GameObject {
 
     @Override
     public void initBiamap() {
-        myPlane = BitmapFactory.decodeResource(resources, R.drawable.myplane3);
+        myPlane = BitmapFactory.decodeResource(resources, R.drawable.myplane4);
         width = myPlane.getWidth() / 2;
         height = myPlane.getHeight();
 
