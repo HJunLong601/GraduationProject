@@ -224,7 +224,7 @@ public class MainView extends BaseView implements MainActivity.MainViewListener 
         cacheCanvas.drawText("下一关："+(task.getRank()+1),0,150,paint);
 
 
-        if (isGameOver){
+        if (isGameOver){  //绘制游戏结束界面
             paint.setTextSize(70);
             paint.setColor(Color.BLACK);
             cacheCanvas.drawBitmap(gameOver,
@@ -426,11 +426,17 @@ public class MainView extends BaseView implements MainActivity.MainViewListener 
     public void onReceiveBluData(String data) {
         Log.i("Receive",data);
         for (int i=0;i < data.length(); i++){
-            analyzeData(data.charAt(i));
+            if (!isStopDraw){
+                analyzeData(data.charAt(i));
+            }
         }
 
     }
 
+    /**
+     * 解析信号，改变飞机位置
+     * @param data
+     */
     private void analyzeData(char data){
         switch (data){
             case 'a':

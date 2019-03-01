@@ -282,8 +282,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onFoundDeviceListenr(BluetoothDevice device) {
-        deviceList.add(device.getName());
-        devices.add(device);
+        if (device.getName() != null && device.getName().trim().length() != 0){ //对蓝牙设备进行过滤
+            deviceList.add(device.getName());
+            devices.add(device);
+        }
+
 
         if (dialog != null){
             dialog.getmAdapter().notifyDataSetChanged();
