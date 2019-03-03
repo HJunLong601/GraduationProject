@@ -255,7 +255,7 @@ public class MainView extends BaseView implements MainActivity.MainViewListener 
                     }
                 }
 
-                //判断是否击中
+                //判断是否击中 第二架飞机
                 for (Bullet bullet :secBullets){
                     if (bullet.isAlive()){ // 子弹是否存活
                         if (object.isCollide(bullet)){ // 是否击中 击中飞机扣血

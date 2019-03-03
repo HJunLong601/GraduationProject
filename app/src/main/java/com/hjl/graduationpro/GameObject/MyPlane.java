@@ -43,25 +43,23 @@ public class MyPlane extends GameObject {
     @Override
     public void drawSelf(Canvas canvas) {
 
-        if (alive){
+        if (alive){ //当对象存活时
             middle_x = object_x + width/2;
-            middle_y = object_y + height/2;
-            if (!isExplosion){
+            middle_y = object_y + height/2; //获取中心位置
+            if (!isExplosion){ //当未进入爆炸状态时
                 canvas.save();
                 canvas.clipRect(object_x,object_y,object_x+width,object_y+height);
                 canvas.drawBitmap(myPlane,object_x,object_y,paint);
                 canvas.restore();
-
-            }else {
-
-                if (currentFrame < explodes.size()){
+            }else { //当进入爆炸状态时
+                if (currentFrame < explodes.size()){ //按帧显示爆炸图片
                     canvas.save();
                     canvas.clipRect(object_x,object_y,object_x + explodes.get(currentFrame).getWidth(),
                             object_y + explodes.get(currentFrame).getHeight());
                     canvas.drawBitmap(explodes.get(currentFrame), object_x, object_y,paint);
                     canvas.restore();
                     currentFrame++;
-                }else {
+                }else { //当显示完所有的爆炸图片时，判定对象死亡，不再绘制，释放相关资源
                     alive = false;
                     release();
                 }

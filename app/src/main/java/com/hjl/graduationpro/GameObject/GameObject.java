@@ -4,7 +4,7 @@ import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 
-abstract public class GameObject {
+ public abstract class GameObject {
 
     protected Paint paint;
     protected int speed;

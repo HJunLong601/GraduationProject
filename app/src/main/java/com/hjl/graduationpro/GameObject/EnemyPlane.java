@@ -9,6 +9,7 @@ import com.hjl.graduationpro.TaskSystem.Task;
 import com.hjl.graduationpro.sounds.GameSoundPool;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 public class EnemyPlane extends GameObject {
 
@@ -86,7 +87,20 @@ public class EnemyPlane extends GameObject {
     }
 
     @Override
-    public void initial(int Speed,int arg0,int arg1) {
+    public void initial(int speed,int bloodVolume,int arg1) {
+
+        if (!isInitial){
+            this.speed = speed;
+            this.bloodVolume = bloodVolume;
+            initBiamap();
+            blood = bloodVolume;
+
+            Random ran = new Random();
+            object_x = ran.nextInt( (int)screen_width-width);
+            object_y = -height*2;
+            isExplosion = false;
+            isInitial = true;
+        }
 
     }
 

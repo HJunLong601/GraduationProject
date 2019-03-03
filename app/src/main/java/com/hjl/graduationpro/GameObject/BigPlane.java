@@ -20,24 +20,7 @@ public class BigPlane extends EnemyPlane {
 
     }
 
-    @Override
-    public void initial(int speed,int bloodVolume,int arg1) {
 
-        if (!isInitial){
-
-            this.speed = speed;
-            this.bloodVolume = bloodVolume;
-            initBiamap();
-            blood = bloodVolume;
-
-            Random ran = new Random();
-            object_x = ran.nextInt( (int)screen_width-width);
-            object_y = -height*2;
-            isExplosion = false;
-            isInitial = true;
-        }
-
-    }
 
     @Override
     public void initBiamap() {

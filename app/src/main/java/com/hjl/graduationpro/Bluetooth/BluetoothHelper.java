@@ -79,13 +79,14 @@ public class BluetoothHelper extends Thread{
                 while ((len = inputStream.read(buffer)) != -1){
                     readMessage.append(new String(buffer,0,len,"GB2312"));
 //                    Log.i("rec","msg size is: "+ readMessage.length());
-                    if (readMessage.length() == "a,b".length()){
-                        bluetoothListenr.onReciveMessage(readMessage.toString());
-                        readMessage.delete(0,readMessage.length());
+//                    if (readMessage.length() == "a,b".length()){
+//                        bluetoothListenr.onReciveMessage(readMessage.toString());
+//                        readMessage.delete(0,readMessage.length());
 //                        Log.i("rec","send");
-                    }
+//                    }
 
-                    if (readMessage.length() >= 6){
+                    if (readMessage.length() >= 3){
+                        bluetoothListenr.onReciveMessage(readMessage.toString());
                         readMessage.delete(0,readMessage.length());
 //                        Log.i("rec",readMessage.length()+"");
 //                        Log.i("rec","fail");

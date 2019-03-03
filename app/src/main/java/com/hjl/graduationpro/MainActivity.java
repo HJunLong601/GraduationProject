@@ -287,7 +287,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             devices.add(device);
         }
 
-
         if (dialog != null){
             dialog.getmAdapter().notifyDataSetChanged();
         }
