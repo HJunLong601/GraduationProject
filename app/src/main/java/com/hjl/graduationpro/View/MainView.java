@@ -321,6 +321,9 @@ public class MainView extends BaseView implements MainActivity.MainViewListener 
         }
 
         //
+        if (!myPlane.isAlive() && !mySecPlane.isAlive()){
+            isGameOver = true;
+        }
 
 
         //最后画二级缓存
