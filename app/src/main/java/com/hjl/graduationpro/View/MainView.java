@@ -242,20 +242,20 @@ public class MainView extends BaseView implements MainActivity.MainViewListener 
 //        Log.i(TAG,"enemyList size is " + enemyList.size());
 //        Log.i(TAG,"bulletList size is " + bullets.size());
 
-        //遍历敌机 画敌机
+        //遍历敌机 画敌机 判断敌机是否被击中
         for (EnemyPlane object :(ArrayList<EnemyPlane>) enemyList.clone()){
             if (object.isAlive() && !isGameOver){
                 //判断是否击中
                 for (Bullet bullet : bullets){
                     if (bullet.isAlive()){ // 子弹是否存活
-                        if (object.isCollide(bullet)){ // 是否击中 击中飞机扣血
+                        if (object.isCollide(bullet)){ // 是否击中 击中敌机扣血
                             bullet.setAlive(false);
 
                         }
                     }
                 }
 
-                //判断是否击中 第二架飞机
+                //判断是否击中 第二架飞机的子弹
                 for (Bullet bullet :secBullets){
                     if (bullet.isAlive()){ // 子弹是否存活
                         if (object.isCollide(bullet)){ // 是否击中 击中飞机扣血
@@ -272,7 +272,7 @@ public class MainView extends BaseView implements MainActivity.MainViewListener 
 
         //画飞机
         if (myPlane.isAlive() | mySecPlane.isAlive()){
-
+             //遍历敌机 判断飞机是否与敌机碰撞
             for (EnemyPlane object :(ArrayList<EnemyPlane>) enemyList.clone()){
                 if (object.isAlive()){
                     if (myPlane.isCollide(object) & !mySecPlane.isAlive()){ //两架飞机都爆炸了游戏才结束
@@ -297,6 +297,8 @@ public class MainView extends BaseView implements MainActivity.MainViewListener 
 
             myPlane.drawSelf(cacheCanvas);
             mySecPlane.drawSelf(cacheCanvas);
+        }else{
+            isGameOver = true;
         }
 
         //画子弹
