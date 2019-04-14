@@ -5,11 +5,25 @@
     android:layout_height="wrap_content"
     android:background="@drawable/shape">
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="设备列表"
+        android:textSize="23sp"
+        android:textStyle="bold"
+        android:gravity="center"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/grey"
+        />
+
     <ListView
         android:id="@+id/dialog_listview"
         android:layout_width="match_parent"
         android:divider="@null"
-        android:layout_height="200dp">
+        android:layout_height="160dp">
     </ListView>
 
     <LinearLayout
