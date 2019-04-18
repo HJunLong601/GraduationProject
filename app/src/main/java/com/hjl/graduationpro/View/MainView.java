@@ -357,7 +357,7 @@ public class MainView extends BaseView implements MainActivity.MainViewListener 
                 if (sleepTime <= 0 ){
                     sleepTime = 2;
                 }
-                //Log.i("GameFrame","Frame Before Lock : " + String.valueOf(1000/(GameFrameTime+0.001)));  //锁定前帧率
+                Log.i("GameFrame","锁定前帧率 : " + String.valueOf((int)(1000/(GameFrameTime+0.001))));  //锁定前帧率
                 if (GameFrameTime<period){
                     try {
                         Thread.sleep(sleepTime);
@@ -366,7 +366,7 @@ public class MainView extends BaseView implements MainActivity.MainViewListener 
                     }
                 }
                 GameFrameTime = System.nanoTime()/1000000L - DrawStartTime; //锁定帧率后实际帧率
-                //Log.i("GameFrame","Frame After Lock : " + String.valueOf(1000/(GameFrameTime+0.001)));  //锁定前帧率
+                Log.i("GameFrame","锁定后帧率 : " + String.valueOf((int) (1000/(GameFrameTime+0.001))));  //锁定后帧率
 
             }
         }catch (Exception e){
